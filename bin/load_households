@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+require 'pathname'
+require 'fileutils'
+require 'csv'
+include FileUtils
+
+CSV = File.expand_path('../config/households.csv', __dir__)

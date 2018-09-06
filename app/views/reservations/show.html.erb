@@ -1,0 +1,141 @@
+<% if @confirmation_page %>
+  <h3>Thank You!</h3>
+  <p>Refresh this page to get back to your invite or <a href="<%= reservation_path %>">click here</a></p>
+<% else %>
+  <div class="card-panel">
+    <div class="row center-align">
+      <h2 class="fw-bold wide-letter">RSVP</h2>
+      <h5><%= @household.name %></h5>
+    </div>
+    <div class="row">
+      <%= form_tag reservation_path(@household.token), method: :put do %>
+        <div class="row">
+          <div class="col l12">
+            <h6>Will this household be attending? <br><span><small>(Please skip ahead to the bottom of this page if responding "no")</small></span></h6>
+            <div class="col">
+              <p>
+                <label>
+                  <%= radio_button_tag  '', "true", @household.attending?, name: "household[attendance]", class: "with-gap" %>
+                  <span>Yes</span>
+                </label>
+              </p>
+            </div>
+            <div class="col">
+              <p>
+                <label>
+                  <%= radio_button_tag  '', "false", @household.attending == false, name: "household[attendance]", class: "with-gap" %>
+                  <span>No</span>
+                </label>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col l12">
+            <h6>Who specifically will be in attendance?</h6>
+            <p>Please note: All children are welcome and do not need an rsvp.</p>
+            <div class="col l12">
+              <% @household.users.each do |user| %>
+                <p>
+                  <label>
+                    <%= check_box_tag '', user.id, user.attending?, name: "household[attendees][]", class: "filled-in"%>
+                    <span><%= user.first_name %></span>
+                  </label>
+                </p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <div class="col l12">
+          <h6>Which events do you plan on attending?</h6>
+          <p><a href="http://saabmonroe.com" target="_blank">Click here</a> for additional information about each event.</p>
+          <p>
+            <label>
+              Selecting an event is <span class="fw-bold text-upcase black-text">not binding</span> you to participate. It is merely for us to make the neccesary arangements with an approximate headcount.*
+            </label>
+          </p>
+          <% Event.order(:id).group_by { |x| x.time.to_date }.each_with_index do |event_group, i| %>
+            <%= render "event", event_group: event_group, index: i, household: @household %>
+          <% end %>
+        </div>
+        <div class="col l12">
+          <h6>Preferred contact method:
+            </br>
+            <label>
+              We would like to be able to keep in contact throughout the long weekend in case a meeting place is updated and/or an event is cancelled due to inclement weather.
+            </label>
+          </h6>
+          <div class="col l5">
+            <p>
+              <label>
+                <%= radio_button_tag  '', "email", @household.email?, name: "household[contact_preference]", class: "with-gap js-radio-contact" %>
+                <span>Email <small>(we'll use the same email this RSVP was sent to)</small></span>
+              </label>
+            </p>
+          </div>
+          <div class="col l3">
+            <p>
+              <label>
+                <%= radio_button_tag  '', "text", @household.text?, name: "household[contact_preference]", class: "with-gap js-radio-contact js-phone-contact" %>
+                <span>Text</span>
+              </label>
+            </p>
+          </div>
+          <div class="col">
+            <p>
+              <label>
+                <%= radio_button_tag  '', "no_contact", @household.no_contact?, name: "household[contact_preference]", class: "with-gap js-radio-contact" %>
+                <span>Don't contact me</span>
+              </label>
+            </p>
+          </div>
+          <div class="input-field col s12">
+            <input placeholder="321 123 3444" id="phone" type="text" name="household[contact][phone]" class="validate js-phone-text" value="<%= @household.formatted_phone %>">
+            <label for="phone">Phone Number</label>
+            <span class="helper-text" data-error="please enter a valid phone number" data-success="">Phone only required if you selected "text" above*</span>
+          </div>
+        </div>
+        <div class="col l12">
+          <h6>Your mailing address:
+            </br>
+            <label>Your address would be appreciated as we would like to send a personal note after the long weekend.</label>
+          </h6>
+          <div class="input-field col s12 m6">
+            <input placeholder="123 Sample Dr." id="address1" type="text" name="household[contact][address1]" value="<%= @household.address1 %>">
+            <label for="address1">Address**</label>
+          </div>
+          <div class="input-field col s12 m6">
+            <input placeholder="Apt 2b" id="address2" type="text" name="household[contact][address2]" value="<%= @household.address2 %>">
+            <label for="address2">Apt, Suite #</label>
+          </div>
+          <div class="input-field col s12 m4">
+            <input placeholder="Bozeman" id="city" type="text" name="household[contact][city]" value="<%= @household.city %>">
+            <label for="city">City</label>
+          </div>
+          <div class="input-field col s12 m4">
+            <%= select_tag "State", options_for_select(states, @household.state), include_blank: true, name: "household[contact][state]" %>
+            <label for="state">State</label>
+          </div>
+          <div class="input-field col s12 m4">
+            <input placeholder="44982" id="zipcode" type="text" name="household[contact][zipcode]" value="<%= @household.zipcode %>">
+            <label for="zipcode">Zipcode</label>
+          </div>
+        </div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row">
+          <div class="col l12 valign center">
+            <%= submit_tag "Submit Reservation", class: "btn" %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col l12">
+            <p>
+              <label>*We kindly ask that if you change your mind at any point between now and July 1, 2018 that you come back to this link and update your reservation!</label>
+            </p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

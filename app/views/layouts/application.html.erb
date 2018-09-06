@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js ie lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+  <!--[if IE 7]>         <html class="no-js ie lt-ie9 lt-ie8"> <![endif]-->
+  <!--[if IE 8]>         <html class="no-js ie lt-ie9"> <![endif]-->
+  <!--[if IE 9]>         <html class="no-js ie"> <![endif]-->
+  <!--[if gt IE 9]><!--> <html class="lang-en country-US locale-en-US js" lang="en"> <!--<![endif]-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="robots" content="noindex">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RSVP | Saab Monroe Wedding</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <noscript>
+      <style type="text/css">
+          .container {display:none;}
+      </style>
+      <div class="noscriptmsg">
+      You don't have javascript enabled. You must enable javascript to complete this form.
+      </div>
+    </noscript>
+  </head>
+
+  <body>
+    <div class="container">
+      <%= yield %>
+    </div>
+  </body>
+</html>
